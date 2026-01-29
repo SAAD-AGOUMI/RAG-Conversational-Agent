@@ -1,0 +1,168 @@
+{
+  "queries": [
+    {"id": "q1", "text": "Comment la transformée de Fourier rapide (FFT) améliore-t-elle l'efficacité du calcul spectral par rapport à la transformée de Fourier discrète standard ?"},
+    {"id": "q2", "text": "Quelles sont les méthodes les plus efficaces pour réduire le bruit blanc gaussien dans les signaux EEG tout en préservant les composantes neurologiques importantes ?"},
+    {"id": "q3", "text": "Comment les coefficients cepstraux MFCC sont-ils calculés et pourquoi sont-ils si efficaces pour la reconnaissance automatique de la parole ?"},
+    {"id": "q4", "text": "Quels sont les avantages et limitations des ondelettes de Daubechies pour l'analyse multi-résolution des signaux non stationnaires ?"},
+    {"id": "q5", "text": "Comment les filtres de Kalman sont-ils utilisés pour la prédiction et l'estimation dans les systèmes de tracking radar ?"},
+    {"id": "q6", "text": "Quelles techniques de traitement du signal permettent de détecter les arythmies cardiaques dans les signaux ECG de longue durée ?"},
+    {"id": "q7", "text": "Comment la modulation d'amplitude en quadrature (QAM) améliore-t-elle l'efficacité spectrale dans les systèmes de communication numériques ?"},
+    {"id": "q8", "text": "Quels algorithmes de compression sont les plus adaptés pour les signaux sismiques tout en conservant les informations géologiques importantes ?"},
+    {"id": "q9", "text": "Comment les réseaux de neurones convolutionnels sont-ils utilisés pour la classification des signaux EMG en interfaces cerveau-machine ?"},
+    {"id": "q10", "text": "Quelles méthodes de traitement d'image permettent d'améliorer la détection des tumeurs dans les images IRM médicales ?"},
+    {"id": "q11", "text": "Quels sont les principes fondamentaux de l'analyse en composantes principales (ACP) pour la réduction de dimensionnalité des signaux multidimensionnels ?"},
+    {"id": "q12", "text": "Comment les algorithmes de beamforming améliorent-ils le rapport signal sur bruit dans les réseaux de capteurs acoustiques ?"},
+    {"id": "q13", "text": "Quelles sont les techniques de synchronisation les plus robustes pour les communications numériques en environnements à évolution rapide ?"},
+    {"id": "q14", "text": "Comment la transformée en ondelettes continues diffère-t-elle de la transformée en ondelettes discrètes dans l'analyse temps-fréquence ?"},
+    {"id": "q15", "text": "Quels sont les défis spécifiques du traitement du signal radar pour la détection de cibles mobiles en environnement encombré ?"},
+    {"id": "q16", "text": "Comment les méthodes adaptatives de filtrage sont-elles utilisées pour l'annulation d'écho dans les systèmes de télécommunications ?"},
+    {"id": "q17", "text": "Quelles approches permettent d'estimer la fonction de transfert d'un système linéaire à partir de mesures bruitées en entrée et sortie ?"},
+    {"id": "q18", "text": "Comment les algorithmes de séparation aveugle de sources (BSS) fonctionnent-ils pour isoler des signaux individuels à partir de mélanges linéaires ?"},
+    {"id": "q19", "text": "Quelles sont les méthodes de quantification optimale pour la compression des signaux audio avec une qualité perceptuelle préservée ?"},
+    {"id": "q20", "text": "Comment la modélisation ARMA est-elle utilisée pour la prédiction spectrale dans l'analyse des séries temporelles ?"},
+    {"id": "q21", "text": "Quels sont les critères de conception pour les filtres numériques à phase linéaire dans les applications audio professionnelles ?"},
+    {"id": "q22", "text": "Comment les techniques de corrélation croisée sont-elles appliquées pour l'estimation de retard dans les systèmes de localisation ?"},
+    {"id": "q23", "text": "Quelles méthodes permettent de détecter et corriger les artefacts de mouvement dans les signaux MEG acquis en neurosciences ?"},
+    {"id": "q24", "text": "Comment l'analyse de cohérence est-elle utilisée pour étudier la connectivité fonctionnelle entre différentes régions cérébrales ?"},
+    {"id": "q25", "text": "Quels sont les algorithmes les plus efficaces pour la détection de pics R dans les signaux ECG avec des morphologies variables ?"},
+    {"id": "q26", "text": "Comment les méthodes de débruitage par soustraction spectrale sont-elles optimisées pour la restauration de la parole ?"},
+    {"id": "q27", "text": "Quelles sont les techniques de modulation adaptative utilisées dans les systèmes OFDM pour les communications sans fil ?"},
+    {"id": "q28", "text": "Comment les transformées de Hilbert-Huang sont-elles appliquées à l'analyse des signaux non linéaires et non stationnaires ?"},
+    {"id": "q29", "text": "Quels sont les défis du traitement du signal pour l'imagerie par résonance magnétique fonctionnelle (IRMf) en temps réel ?"},
+    {"id": "q30", "text": "Comment les algorithmes de suivi de phase sont-ils implémentés dans les boucles à verrouillage de phase (PLL) numériques ?"},
+    {"id": "q31", "text": "Quelles méthodes d'interpolation permettent une reconstruction précise des signaux sous-échantillonnés sans aliasing ?"},
+    {"id": "q32", "text": "Comment les techniques de warping temporel sont-elles utilisées pour l'alignement de signaux biomédicaux ?"},
+    {"id": "q33", "text": "Quels sont les principes des codeurs audio perceptuels comme le MP3 et l'AAC pour la compression avec perte ?"},
+    {"id": "q34", "text": "Comment les méthodes de déconvolution aveugle permettent-elles de restaurer des signaux dégradés par un canal inconnu ?"},
+    {"id": "q35", "text": "Quelles sont les approches bayésiennes pour l'estimation de paramètres dans les modèles de signaux stochastiques ?"},
+    {"id": "q36", "text": "Comment les algorithmes de matching pursuit sont-ils utilisés pour la représentation parcimonieuse des signaux ?"},
+    {"id": "q37", "text": "Quels sont les défis du traitement du signal pour la détection précoce des signaux sismiques précurseurs ?"},
+    {"id": "q38", "text": "Comment les techniques de formation de voies adaptatives améliorent-elles les performances des sonars actifs ?"},
+    {"id": "q39", "text": "Quelles méthodes permettent d'extraire les caractéristiques pertinentes des signaux EMG de surface pour le contrôle prosthétique ?"},
+    {"id": "q40", "text": "Comment les algorithmes de classification supervisée sont-ils appliqués à la reconnaissance d'émotions à partir du signal vocal ?"}
+  ],
+  "corpus": [
+    {
+      "id": "d1",
+      "text": "La transformée de Fourier rapide (FFT) est un algorithme optimisé pour calculer la transformée de Fourier discrète (DFT) qui réduit la complexité computationnelle de O(N²) à O(N log N). Cette amélioration permet l'analyse spectrale en temps réel de signaux de grande taille."
+    },
+    {
+      "id": "d2",
+      "text": "Les filtres adaptatifs LMS (Least Mean Squares) sont largement utilisés pour l'annulation de bruit dans les signaux biomédicaux. Ils s'adaptent automatiquement aux caractéristiques statistiques du bruit et du signal utile."
+    },
+    {
+      "id": "d3",
+      "text": "Les coefficients cepstraux MFCC (Mel-Frequency Cepstral Coefficients) simulent la réponse non linéaire de l'oreille humaine en utilisant une échelle de fréquence mel. Ils sont calculés via une transformée de Fourier, un banc de filtres triangulaires et une transformée en cosinus discrète."
+    },
+    {
+      "id": "d4",
+      "text": "Les ondelettes de Daubechies offrent un support compact et des propriétés de régularité qui les rendent idéales pour l'analyse multi-résolution. Elles sont particulièrement efficaces pour détecter les singularités dans les signaux transitoires."
+    },
+    {
+      "id": "d5",
+      "text": "Le filtre de Kalman est un algorithme récursif qui estime l'état d'un système dynamique à partir de mesures bruitées. Il combine des modèles de prédiction et de mesure pour fournir une estimation optimale au sens des moindres carrés."
+    },
+    {
+      "id": "d6",
+      "text": "La détection d'arythmies cardiaques dans les signaux ECG utilise souvent l'analyse des intervalles R-R, la morphologie des complexes QRS et des algorithmes de classification basés sur l'apprentissage machine pour identifier les anomalies rythmiques."
+    },
+    {
+      "id": "d7",
+      "text": "La modulation QAM (Quadrature Amplitude Modulation) combine deux porteuses en quadrature de phase, permettant de transmettre deux fois plus d'informations dans la même bande passante. Les constellations 16-QAM et 64-QAM sont courantes dans les communications modernes."
+    },
+    {
+      "id": "d8",
+      "text": "La compression des signaux sismiques utilise souvent des transformées en ondelettes suivies de techniques de quantification et de codage entropique. Les méthodes préservent les arrivées d'ondes P et S critiques pour l'interprétation géologique."
+    },
+    {
+      "id": "d9",
+      "text": "Les réseaux de neurones convolutionnels (CNN) appliqués aux signaux EMG extraient automatiquement des caractéristiques spatiales et temporelles pour la classification des mouvements intentionnels dans les interfaces cerveau-machine."
+    },
+    {
+      "id": "d10",
+      "text": "L'amélioration des images IRM pour la détection de tumeurs combine le filtrage anisotrope pour réduire le bruit tout en préservant les bords, la segmentation basée sur les niveaux de gris, et l'analyse texture pour différencier les tissus sains et pathologiques."
+    },
+    {
+      "id": "d11",
+      "text": "L'analyse en composantes principales (ACP) est une technique de réduction de dimensionnalité qui transforme les variables corrélées en composantes orthogonales. En traitement du signal, elle permet de compresser les données tout en conservant la variance maximale."
+    },
+    {
+      "id": "d12",
+      "text": "Le beamforming est une technique de traitement spatial du signal qui combine les signaux de multiples capteurs pour former un lobe directionnel. Les algorithmes adaptatifs comme MVDR minimisent la variance tout en maintiennent un gain unitaire dans la direction d'intérêt."
+    },
+    {
+      "id": "d13",
+      "text": "La synchronisation dans les communications numériques utilise des boucles à verrouillage de phase (PLL) et des algorithmes d'estimation de retard pour aligner les horloges de l'émetteur et du récepteur. Les méthodes basées sur l'autocorrélation sont robustes au bruit."
+    },
+    {
+      "id": "d14",
+      "text": "La transformée en ondelettes continues (CWT) utilise une échelle continue permettant une analyse multi-résolution fine, tandis que la transformée en ondelettes discrètes (DWT) utilise des échelles dyadiques pour une implémentation efficace avec des bancs de filtres."
+    },
+    {
+      "id": "d15",
+      "text": "Le traitement du signal radar pour la détection de cibles mobiles doit gérer l'effet Doppler, l'encombrement du milieu et les échos multiples. Les algorithmes CFAR (Constant False Alarm Rate) adaptent dynamiquement les seuils de détection."
+    },
+    {
+      "id": "d16",
+      "text": "L'annulation d'écho dans les télécommunications utilise des filtres adaptatifs qui modélisent la réponse impulsionnelle du chemin d'écho. L'algorithme NLMS (Normalized Least Mean Squares) offre un bon compromis entre complexité et performance."
+    },
+    {
+      "id": "d17",
+      "text": "L'estimation de fonction de transfert par la méthode des moindres carrés utilise les corrélations croisées entre l'entrée et la sortie. En présence de bruit, les méthodes d'instrument variables ou d'erreur de sortie améliorent la robustesse."
+    },
+    {
+      "id": "d18",
+      "text": "La séparation aveugle de sources (BSS) par l'algorithme ICA (Independent Component Analysis) suppose l'indépendance statistique des sources. Elle est largement utilisée en EEG pour séparer les signaux cérébraux des artefacts."
+    },
+    {
+      "id": "d19",
+      "text": "La quantification audio perceptuelle utilise les masques fréquentiels de l'audition humaine pour allouer les bits de manière optimale. Les codeurs comme MP3 exploitent les propriétés psychoacoustiques pour éliminer les composantes inaudibles."
+    },
+    {
+      "id": "d20",
+      "text": "La modélisation ARMA (AutoRegressive Moving Average) combine des pôles et des zéros pour représenter des spectres avec des pics et des vallées. L'estimation des paramètres utilise souvent l'algorithme de Burg ou les méthodes de prédiction linéaire."
+    }
+  ],
+  "ground_truth": {
+    "q1": ["d1", "d4", "d14"],
+    "q2": ["d2", "d6", "d18"],
+    "q3": ["d3", "d19", "d11"],
+    "q4": ["d4", "d14", "d20"],
+    "q5": ["d5", "d15", "d12"],
+    "q6": ["d6", "d2", "d9"],
+    "q7": ["d7", "d13", "d16"],
+    "q8": ["d8", "d4", "d19"],
+    "q9": ["d9", "d3", "d11"],
+    "q10": ["d10", "d4", "d2"],
+    "q11": ["d11", "d3", "d20"],
+    "q12": ["d12", "d2", "d5"],
+    "q13": ["d13", "d7", "d16"],
+    "q14": ["d14", "d4", "d20"],
+    "q15": ["d15", "d5", "d12"],
+    "q16": ["d16", "d2", "d13"],
+    "q17": ["d17", "d5", "d20"],
+    "q18": ["d18", "d3", "d11"],
+    "q19": ["d19", "d3", "d8"],
+    "q20": ["d20", "d11", "d17"],
+    "q21": ["d1", "d19", "d2"],
+    "q22": ["d13", "d17", "d12"],
+    "q23": ["d2", "d18", "d6"],
+    "q24": ["d6", "d18", "d11"],
+    "q25": ["d6", "d9", "d2"],
+    "q26": ["d2", "d3", "d19"],
+    "q27": ["d7", "d13", "d16"],
+    "q28": ["d4", "d14", "d20"],
+    "q29": ["d10", "d2", "d9"],
+    "q30": ["d13", "d16", "d7"],
+    "q31": ["d1", "d4", "d14"],
+    "q32": ["d6", "d2", "d9"],
+    "q33": ["d19", "d3", "d8"],
+    "q34": ["d17", "d18", "d2"],
+    "q35": ["d5", "d20", "d11"],
+    "q36": ["d4", "d14", "d11"],
+    "q37": ["d8", "d4", "d2"],
+    "q38": ["d12", "d15", "d5"],
+    "q39": ["d9", "d3", "d6"],
+    "q40": ["d3", "d19", "d9"]
+  }
+}
