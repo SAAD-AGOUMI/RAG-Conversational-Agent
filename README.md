@@ -45,7 +45,7 @@ ollama-server  | Model <LLM_CHUNKING> pulled successfully.
 - Ouvrez votre navigateur et allez à l'URL suivante : http://localhost:8501
 - Attendez pour que l'interface se charge complètement.
 
-![image_acceuil](./screenshots/image_acceuil.png)
+![image_acceuil](./Screenshots/image_acceuil.png)
 
 #### **Étape 2 : Créer un utilisateur administrateur**
 - Sur la page d'accueil, vous verrez une interface de connexion.
@@ -54,7 +54,7 @@ ollama-server  | Model <LLM_CHUNKING> pulled successfully.
     - Nom d'utilisateur admin
     - Mot de passe sécurisé
 
-![image_creation_utilisateur](./screenshots/image_creation_utilisateur.png)
+![image_creation_utilisateur](./Screenshots/image_creation_utilisateur.png)
 
 - Pourquoi créer un admin ? L'administrateur est le seul utilisateur qui peut :
     - Ajouter des documents
@@ -64,13 +64,13 @@ ollama-server  | Model <LLM_CHUNKING> pulled successfully.
 #### **Étape 3 : Se connecter en tant qu'admin**
 - Utilisez les identifiants que vous venez de créer pour vous connecter.
 
-![image_connexion](./screenshots/image_connexion.png)
+![image_connexion](./Screenshots/image_connexion.png)
 
 #### **Étape 4 : Uploader des documents**
 - Dans la barre latérale (sidebar), cliquez sur "Upload"
 - Vous verrez l'interface d'ajout de documents
 
-![image_sidebar_upload](./screenshots/image_sidebar_upload.png)
+![image_sidebar_upload](./Screenshots/image_sidebar_upload.png)
 
 #### **Étape 5 : Ajouter des documents**
 - Cliquez sur "Browse files"
@@ -90,7 +90,7 @@ ollama-server  | Model <LLM_CHUNKING> pulled successfully.
 - Vous pouvez maintenant communiquer avec votre chatbot
 - Posez des questions basées sur les documents que vous avez uploadés
 
-![image_chatbot](./screenshots/image_chatbot.png)
+![image_chatbot](./Screenshots/image_chatbot.png)
 
 #### **Étape 9 (Optionnelle) : Créer d'autres utilisateurs**
 - Vous pouvez vous déconnecter (bouton "Déconnexion")
