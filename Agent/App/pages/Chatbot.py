@@ -136,6 +136,14 @@ with st.sidebar:
         st.session_state["chat_title"] = get_history_title(username, selection)
         st.session_state["pending_title"] = None
         st.rerun()
+    
+    # -------------------------------
+    # Déconnexion
+    # -------------------------------
+    if st.button("🚪 Déconnexion"):
+        for key in list(st.session_state.keys()):
+            del st.session_state[key]
+        st.rerun()
 
 # ---------------------------------------------------------
 # Affichage du titre de la discussion
@@ -240,6 +248,7 @@ if prompt:
 
         if st.session_state.get("pending_title"):
             chat_title = st.session_state["pending_title"]
+            st.session_state["pending_title"] = None
         else:
             title_prompt = f"""
             RÔLE

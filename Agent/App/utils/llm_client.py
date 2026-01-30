@@ -15,7 +15,7 @@ import ollama
 # -----------------------------
 # 🌐 Configuration du client Ollama pour conteneur
 # -----------------------------
-OLLAMA_HOST = os.getenv("OLLAMA_HOST")
+OLLAMA_HOST = os.getenv("OLLAMA_URL")
 
 # Crée un client Ollama explicitement lié au host correct
 client = ollama.Client(host=OLLAMA_HOST)
