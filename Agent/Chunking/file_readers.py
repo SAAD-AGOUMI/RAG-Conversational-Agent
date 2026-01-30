@@ -10,9 +10,10 @@ Ce module est utilisé en amont du pipeline (ex. chunking, RAG) pour uniformiser
 la lecture des documents sources.
 """
 
+from pathlib import Path  # Gestion des chemins de fichiers de manière portable
+
 import fitz  # PyMuPDF : bibliothèque pour lire et parser des fichiers PDF
 from docx import Document  # python-docx : bibliothèque pour lire les fichiers DOCX
-from pathlib import Path  # Gestion des chemins de fichiers de manière portable
 
 
 def read_pdf(path: Path):
@@ -23,7 +24,8 @@ def read_pdf(path: Path):
         path (Path): chemin vers le fichier PDF.
 
     Returns:
-        list[dict]: liste de dictionnaires contenant le numéro de page et le texte extrait.
+        list[dict]: liste de dictionnaires contenant le numéro de page et le texte
+        extrait.
     """
     pages = []
     # Ouverture du PDF avec PyMuPDF
@@ -51,7 +53,7 @@ def read_docx(path: Path):
     Returns:
         list[dict]: liste contenant un seul dictionnaire avec le texte extrait.
     """
-    doc = Document(path)
+    doc = Document(str(path))
     # Concaténation des paragraphes non vides
     text = "\n".join(p.text for p in doc.paragraphs if p.text.strip())
     return [{"page_number": 1, "text": text.strip()}]
@@ -69,11 +71,13 @@ def read_txt(path: Path):
     Returns:
         list[dict]: liste contenant un seul dictionnaire avec le texte extrait.
     """
-    return [{
-        "page_number": 1,
-        # Lecture du fichier en UTF-8 avec tolérance aux erreurs
-        "text": path.read_text(encoding="utf-8", errors="ignore").strip()
-    }]
+    return [
+        {
+            "page_number": 1,
+            # Lecture du fichier en UTF-8 avec tolérance aux erreurs
+            "text": path.read_text(encoding="utf-8", errors="ignore").strip(),
+        }
+    ]
 
 
 def load_text_from_file(path: Path):

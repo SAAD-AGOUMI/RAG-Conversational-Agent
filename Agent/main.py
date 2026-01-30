@@ -7,10 +7,10 @@ Ce script :
 3. Lance l'application Streamlit (page d'accueil).
 """
 
-from utils.wait_for_services import wait_for_services
 import os
-import streamlit as st
 import subprocess
+
+from utils.wait_for_services import wait_for_services
 
 # ---------------------------------------------------------
 # Vérification des services
@@ -18,6 +18,7 @@ import subprocess
 print("⌛ Vérification des services externes (Qdrant, Ollama)...")
 wait_for_services()
 print("🚀 Services prêts, démarrage de l'Agent...")
+
 
 # ---------------------------------------------------------
 # Lancer l'application Streamlit
@@ -30,14 +31,20 @@ def main():
     app_dir = os.path.join(os.path.dirname(__file__), "App")
 
     # Lancement de Streamlit sur la page Home.py
-    subprocess.run([
-        "streamlit",
-        "run",
-        os.path.join(app_dir, "Home.py"),
-        "--server.port", "8501",
-        "--server.headless", "true",
-        "--server.enableCORS", "false"
-    ])
+    subprocess.run(
+        [
+            "streamlit",
+            "run",
+            os.path.join(app_dir, "Home.py"),
+            "--server.port",
+            "8501",
+            "--server.headless",
+            "true",
+            "--server.enableCORS",
+            "false",
+        ]
+    )
+
 
 # ---------------------------------------------------------
 # Point d'entrée

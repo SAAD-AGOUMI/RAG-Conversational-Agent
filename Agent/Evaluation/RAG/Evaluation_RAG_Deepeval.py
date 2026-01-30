@@ -1,7 +1,7 @@
 """
 📊 Benchmark DeepEval pour évaluation d'un système RAG
 
-Ce fichier permet d'évaluer un système de Retrieval-Augmented Generation (RAG) 
+Ce fichier permet d'évaluer un système de Retrieval-Augmented Generation (RAG)
 en utilisant DeepEval et un LLM Ollama.
 
 Fonctionnalités principales :
@@ -9,7 +9,7 @@ Fonctionnalités principales :
    - Les questions à poser (queries)
    - Le corpus de documents
    - Les réponses attendues (ground_truth)
-2. Génération de réponses à partir des chunks de documents récupérés via 
+2. Génération de réponses à partir des chunks de documents récupérés via
    `search_and_rerank` et re-ranking avec un modèle cross-encoder.
 3. Évaluation automatique des réponses générées selon 4 métriques DeepEval :
    - Faithfulness (fidélité)
@@ -19,27 +19,28 @@ Fonctionnalités principales :
 4. Calcul du score global moyen et sauvegarde des résultats dans un fichier JSON.
 """
 
+import json
 import os
 import sys
-import json
-import pandas as pd
 from pathlib import Path
-from dotenv import load_dotenv
+
+import pandas as pd
 from deepeval import evaluate
-from deepeval.test_case import LLMTestCase
+from deepeval.evaluate import AsyncConfig
 from deepeval.metrics import (
-    FaithfulnessMetric,
+    AnswerRelevancyMetric,
     ContextualPrecisionMetric,
     ContextualRecallMetric,
-    AnswerRelevancyMetric
+    FaithfulnessMetric,
 )
-from deepeval.evaluate import AsyncConfig
 from deepeval.models import OllamaModel
+from deepeval.test_case import LLMTestCase
+from dotenv import load_dotenv
 
 # -------------------------------------------------
 # Timeout par tentative de DeepEval prolongé (10h)
 # -------------------------------------------------
-os.environ["DEEPEVAL_PER_ATTEMPT_TIMEOUT_SECONDS_OVERRIDE"] = "36000" 
+os.environ["DEEPEVAL_PER_ATTEMPT_TIMEOUT_SECONDS_OVERRIDE"] = "36000"
 
 # -------------------------------------------------
 # Définition de la racine du projet
@@ -50,6 +51,7 @@ sys.path.append(str(ROOT_DIR / "Embedding"))
 
 from utils.llm_client import query_llm
 
+
 # -------------------------------------------------
 # CHARGEMENT DES DONNÉES
 # -------------------------------------------------
@@ -57,6 +59,7 @@ def load_json(path):
     """Charge un fichier JSON depuis un chemin donné"""
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
+
 
 dataset_path = ROOT_DIR / "Evaluation" / "RAG" / "Golden_dataset.json"
 dataset = load_json(dataset_path)  # contient queries, corpus, ground_truth
@@ -71,6 +74,7 @@ corpus_texts = [d["text"] for d in corpus]
 # GÉNÉRATION DE LA RÉPONSE
 # -------------------------------------------------
 from search_and_rerank import search_and_rerank
+
 
 def generate_answer(question):
     """Génère la réponse à une question en utilisant RAG"""
@@ -118,6 +122,7 @@ def generate_answer(question):
     reponse_final = query_llm(prompt)
     return reponse_final.strip(), chunks_list
 
+
 # -------------------------------------------------
 # ÉVALUATION GÉNÉRATION (DeepEval + Ollama)
 # -------------------------------------------------
@@ -125,6 +130,7 @@ def generate_answer(question):
 load_dotenv()
 ollama_model_name = os.getenv("LLM_EVALUATION")
 eval_llm = OllamaModel(model=ollama_model_name)
+
 
 def evaluate_generation(queries, ground_truth):
     """Évalue toutes les questions du dataset avec DeepEval"""
@@ -135,7 +141,7 @@ def evaluate_generation(queries, ground_truth):
 
     for idx, q in enumerate(queries):
         print(f"⏳ Traitement question {idx + 1}/{len(queries)}: {q['text'][:150]}...")
-        
+
         qid = q["id"]
         relevant_docs = [c for c in corpus if c["id"] in ground_truth.get(qid, [])]
 
@@ -146,7 +152,7 @@ def evaluate_generation(queries, ground_truth):
             input=q["text"],
             actual_output=response,
             expected_output=expected_answer,
-            retrieval_context=chunks_list
+            retrieval_context=chunks_list,
         )
         test_cases.append(test_case)
 
@@ -157,11 +163,7 @@ def evaluate_generation(queries, ground_truth):
         AnswerRelevancyMetric(model=eval_llm),
     ]
 
-    _ = evaluate(
-        test_cases,
-        metrics=metrics,
-        async_config=AsyncConfig(run_async=False)
-    )
+    _ = evaluate(test_cases, metrics=metrics, async_config=AsyncConfig(run_async=False))
 
     deepeval_file = ROOT_DIR / ".deepeval" / ".latest_test_run.json"
 
@@ -175,7 +177,7 @@ def evaluate_generation(queries, ground_truth):
             "total_questions": len(test_cases),
             "evaluation_time_seconds": data["testRunData"]["runDuration"],
             "timestamp": pd.Timestamp.now().isoformat(),
-            "metrics": {}
+            "metrics": {},
         }
 
         for metric_data in metrics_summary:
@@ -191,18 +193,20 @@ def evaluate_generation(queries, ground_truth):
                 "passed": passed,
                 "total": total,
                 "average_score": round(avg_score, 4),
-                "scores": scores
+                "scores": scores,
             }
 
             print(f"{metric_name}: {pass_rate:.2f}% pass rate")
 
-        all_avg = [results_dict["metrics"][m]["average_score"] for m in results_dict["metrics"]]
+        all_avg = [
+            results_dict["metrics"][m]["average_score"] for m in results_dict["metrics"]
+        ]
         global_score = sum(all_avg) / len(all_avg) if all_avg else 0
         results_dict["global_average_score"] = round(global_score, 4)
 
-        print("\n" + "="*80)
+        print("\n" + "=" * 80)
         print(f"Score Global Moyen: {global_score:.4f}")
-        print("="*80 + "\n")
+        print("=" * 80 + "\n")
 
         output_path = ROOT_DIR / "Evaluation" / "RAG" / "evaluation_results.json"
         with open(output_path, "w", encoding="utf-8") as f:
@@ -214,6 +218,7 @@ def evaluate_generation(queries, ground_truth):
     else:
         print(f"❌ ERREUR: Fichier {deepeval_file} introuvable!")
         return None
+
 
 # -------------------------------------------------
 # Lancement de l'évaluation

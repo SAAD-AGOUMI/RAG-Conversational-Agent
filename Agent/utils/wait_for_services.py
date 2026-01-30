@@ -1,12 +1,14 @@
-from dotenv import load_dotenv
 import os
 import time
+
 import requests
+from dotenv import load_dotenv
 
 # Chargement des variables d'environnement
 load_dotenv()
 QDRANT_URL = os.getenv("QDRANT_URL")
 OLLAMA_URL = os.getenv("OLLAMA_URL")
+
 
 def wait_for_services():
     while True:

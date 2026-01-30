@@ -13,17 +13,16 @@ Permettre une recherche sémantique efficace sur des documents découpés
 via une base vectorielle (Qdrant).
 """
 
-import uuid
-from dotenv import load_dotenv
 import os
-import pandas as pd
+import uuid
 from pathlib import Path
-import hashlib
+
+import pandas as pd
 import torch
+from dotenv import load_dotenv
 from qdrant_client import QdrantClient, models
 from qdrant_client.http.exceptions import UnexpectedResponse
 from sentence_transformers import SentenceTransformer
-
 
 # Détermination du dossier racine du projet (2 niveaux au-dessus du fichier courant)
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -78,8 +77,8 @@ except UnexpectedResponse:
         collection_name=collection_name,
         vectors_config=models.VectorParams(
             size=1024,  # Dimension des embeddings du modèle d'embedding
-            distance=models.Distance.COSINE  # Mesure de similarité
-        )
+            distance=models.Distance.COSINE,  # Mesure de similarité
+        ),
     )
 
 # Liste qui contiendra tous les points à insérer
@@ -89,7 +88,12 @@ points = []
 for idx, row in df.iterrows():
 
     # Génération d'un ID unique pour chaque chunk
-    unique_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"{row['Doc']}|{row['Page']}|{row['Parent']}|{row['Chunk']}"))
+    unique_id = str(
+        uuid.uuid5(
+            uuid.NAMESPACE_DNS,
+            f"{row['Doc']}|{row['Page']}|{row['Parent']}|{row['Chunk']}",
+        )
+    )
 
     # Génération de l'embedding du chunk
     emb = model.encode(row["Chunk"]).tolist()
@@ -102,8 +106,8 @@ for idx, row in df.iterrows():
             "Chunk": row["Chunk"],
             "Doc": row["Doc"],
             "Page": row["Page"],
-            "ParentID": row["Parent"]
-        }
+            "ParentID": row["Parent"],
+        },
     )
     points.append(point)
 

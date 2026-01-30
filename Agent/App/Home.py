@@ -11,6 +11,7 @@ Les emojis et le style HTML sont utilisés pour l'interface visuelle.
 """
 
 import streamlit as st
+
 from utils.auth_local import login_form_inside_page
 
 # -------------------------------------------------
@@ -33,7 +34,7 @@ st.markdown(
         </p>
     </div>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
 # -------------------------------------------------

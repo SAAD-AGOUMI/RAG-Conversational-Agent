@@ -14,13 +14,15 @@ et peut servir de base avant une intégration avec une solution IAM plus avancé
 (Entra ID, OAuth, etc.).
 """
 
-import streamlit as st
 import json
 import os
+
 import bcrypt
+import streamlit as st
 
 # Chemin vers le fichier users.json
 USERS_FILE = os.path.join(os.path.dirname(__file__), "data", "users", "users.json")
+
 
 # ----------------------------------------------------------------------
 # S'assurer que le fichier users.json existe
@@ -37,6 +39,7 @@ def _ensure_file():
     if not os.path.exists(USERS_FILE):
         with open(USERS_FILE, "w") as f:
             json.dump({}, f)
+
 
 # Charger les utilisateurs depuis le fichier JSON
 def load_users():
@@ -61,6 +64,7 @@ def load_users():
         except Exception:
             return {}
 
+
 # Sauvegarder les utilisateurs dans le fichier JSON
 def save_users(users: dict):
     """
@@ -71,6 +75,7 @@ def save_users(users: dict):
     with open(USERS_FILE, "w") as f:
         json.dump(users, f, indent=2)
 
+
 # Hachage du mot de passe
 def hash_password(plain_password: str) -> str:
     """
@@ -80,6 +85,7 @@ def hash_password(plain_password: str) -> str:
     :return: mot de passe hashé (chaîne de caractères)
     """
     return bcrypt.hashpw(plain_password.encode(), bcrypt.gensalt()).decode()
+
 
 # Vérification du mot de passe
 def check_password(plain_password: str, hashed: str) -> bool:
@@ -94,6 +100,7 @@ def check_password(plain_password: str, hashed: str) -> bool:
         return bcrypt.checkpw(plain_password.encode(), hashed.encode())
     except Exception:
         return False
+
 
 # ----------------------------------------------------------------------
 # Widget d'authentification (Connexion + Inscription)

@@ -7,20 +7,18 @@ Ce fichier permet à l'utilisateur authentifié de :
 3. Garantir que l'accès est sécurisé via l'authentification.
 """
 
-from dotenv import load_dotenv
 import os
+
 import streamlit as st
+from dotenv import load_dotenv
+
 from utils.auth_local import require_login
 
 # ---------------------------------------------------------
 # Configuration de la page
 # ---------------------------------------------------------
 # La configuration de la page doit être la première commande Streamlit
-st.set_page_config(
-    page_title="Paramètres",
-    page_icon="⚙️",
-    layout="wide"
-)
+st.set_page_config(page_title="Paramètres", page_icon="⚙️", layout="wide")
 
 # ---------------------------------------------------------
 # Authentification obligatoire

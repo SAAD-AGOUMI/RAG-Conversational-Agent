@@ -12,15 +12,14 @@ Fonctionnalités principales :
 """
 
 import json
-import time
 import shutil
-from pathlib import Path
+import time
 from multiprocessing import Pool, cpu_count
+from pathlib import Path
 
 from Chunking.file_readers import load_text_from_file
 from Chunking.process_paragraph import process_paragraph
 from Chunking.registry import load_registry, save_registry
-
 
 # Extensions de fichiers supportées pour le chunking
 SUPPORTED_EXT = [".pdf", ".docx", ".txt"]
@@ -44,10 +43,7 @@ def load_json_or_empty(path: Path):
     return []
 
 
-def main(
-    use_multiprocessing=True,
-    max_processes=4
-):
+def main(use_multiprocessing=True, max_processes=4):
     """
     Point d'entrée principal du pipeline de chunking.
 
@@ -89,9 +85,9 @@ def main(
 
     # Sélection des nouveaux fichiers à traiter
     new_files = [
-        f for f in new_docs.iterdir()
-        if f.suffix.lower() in SUPPORTED_EXT
-        and f.name not in processed_registry
+        f
+        for f in new_docs.iterdir()
+        if f.suffix.lower() in SUPPORTED_EXT and f.name not in processed_registry
     ]
 
     if not new_files:
@@ -132,13 +128,13 @@ def main(
     # Sauvegarde des paragraphes
     paragraphs_path.write_text(
         json.dumps(existing_paragraphs + new_paragraphs, indent=4, ensure_ascii=False),
-        encoding="utf-8"
+        encoding="utf-8",
     )
 
     # Sauvegarde des chunks
     chunks_path.write_text(
         json.dumps(existing_chunks + new_chunks, indent=4, ensure_ascii=False),
-        encoding="utf-8"
+        encoding="utf-8",
     )
 
     # Archivage des fichiers traités et mise à jour du registre

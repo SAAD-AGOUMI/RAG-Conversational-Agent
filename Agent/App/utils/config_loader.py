@@ -13,11 +13,12 @@ Ce fichier fournit les fonctions suivantes :
 📂 Tous les fichiers JSON sont stockés dans `utils/history/<hash_utilisateur>/`.
 """
 
-import toml
-from functools import lru_cache
+import hashlib
 import json
 import os
-import hashlib
+from functools import lru_cache
+
+import toml
 
 # Répertoire racine du projet
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -29,7 +30,7 @@ def load_config():
     🔧 Charger la configuration globale depuis le fichier `config.toml`.
 
     Utilise un cache pour éviter de recharger le fichier à chaque appel.
-    
+
     Retour :
         dict : Contenu du fichier TOML sous forme de dictionnaire.
     """
@@ -154,7 +155,7 @@ def save_history_for(username: str, messages, filename: str, title: str | None =
 
     Args:
         username (str) : Nom de l'utilisateur.
-        messages (list | dict) : Liste de messages [(role, content, timestamp), ...] 
+        messages (list | dict) : Liste de messages [(role, content, timestamp), ...]
                                  ou dict complet {"title": ..., "messages": [...]}
         filename (str) : Nom du fichier JSON à créer/modifier.
         title (str | None) : Titre de la discussion (optionnel).

@@ -36,13 +36,13 @@ Recall@k = (documents pertinents retrouvés dans le top-k) / (documents pertinen
 
 #### 3. Normalized Discounted Cumulative Gain (nDCG)
 
-Le **nDCG** mesure la qualité **du classement** des documents pertinents.  
+Le **nDCG** mesure la qualité **du classement** des documents pertinents.
 Il prend en compte la position des documents pertinents et attribue une **pondération logarithmique** : les documents retrouvés plus haut valent plus.
 
 
 nDCG@k = DCG@k/IDCG@k
 
-avec  
+avec
 
 DCG@k = somme( rel_i/log_2(i+1) ) tel que i de 1 jusqu'à k
 
@@ -56,34 +56,34 @@ et rel_i est la pertinence du document à la position *i*.
 ---
 
 **En pratique :**
-- On utilise **MRR** pour évaluer la **précision des premiers résultats**,  
-- **Recall@k** pour mesurer la **capacité à tout retrouver**,  
+- On utilise **MRR** pour évaluer la **précision des premiers résultats**,
+- **Recall@k** pour mesurer la **capacité à tout retrouver**,
 - et **nDCG** pour juger la **qualité du classement global**.
 
 ---
 
 ### Benchmark entre BGE-M3 et Multilingual-E5-Large
 
-Deux modèles d'embeddings ont été évalués sur un corpus technique lié au traitement du signal.  
+Deux modèles d'embeddings ont été évalués sur un corpus technique lié au traitement du signal.
 Les métriques précédentes ont été calculées sur un jeu de 40 requêtes afin de comparer leurs performances globales.
 
 #### Résultats :
 
 **Model BGE-M3 :**
-- MRR          : 0.8481  
-- Recall@1     : 0.2500  
-- Recall@3     : 0.5083  
-- Recall@5     : 0.6083  
-- Recall@10    : 0.8167  
-- nDCG@10      : 0.7172  
+- MRR          : 0.8481
+- Recall@1     : 0.2500
+- Recall@3     : 0.5083
+- Recall@5     : 0.6083
+- Recall@10    : 0.8167
+- nDCG@10      : 0.7172
 
 **Model Multilingual-E5-Large :**
-- MRR          : 0.8205  
-- Recall@1     : 0.2333  
-- Recall@3     : 0.5000  
-- Recall@5     : 0.6333  
-- Recall@10    : 0.7750  
-- nDCG@10      : 0.6815  
+- MRR          : 0.8205
+- Recall@1     : 0.2333
+- Recall@3     : 0.5000
+- Recall@5     : 0.6333
+- Recall@10    : 0.7750
+- nDCG@10      : 0.6815
 
 ---
 
@@ -91,12 +91,12 @@ Les métriques précédentes ont été calculées sur un jeu de 40 requêtes afi
 
 → Le modèle **BGE-M3** présente de meilleures performances globales :
 
-- **MRR plus élevé**, indiquant qu'il retrouve les documents pertinents plus haut dans le classement.  
-- **nDCG@10 supérieur**, reflétant un meilleur ordonnancement des documents.  
-- **Recall@10 légèrement meilleur**, traduisant une meilleure couverture des documents pertinents.  
+- **MRR plus élevé**, indiquant qu'il retrouve les documents pertinents plus haut dans le classement.
+- **nDCG@10 supérieur**, reflétant un meilleur ordonnancement des documents.
+- **Recall@10 légèrement meilleur**, traduisant une meilleure couverture des documents pertinents.
 
 En résumé :
-- **BGE-M3** est plus précis, mieux classant et plus robuste que **E5** sur ce jeu de données.  
+- **BGE-M3** est plus précis, mieux classant et plus robuste que **E5** sur ce jeu de données.
 - Son architecture hybride (dense + lexical + multi-vector) lui confère un avantage pour la recherche sémantique multilingue.
 
 ---
@@ -107,31 +107,34 @@ Le modèle **BGE-M3** est le plus performant pour cette tâche de recherche sém
 et il est donc recommandé pour l'intégration dans le pipeline **RAG (Retrieval-Augmented Generation)** du projet.
 """
 
+import json
+import os
 from pathlib import Path
+
 import numpy as np
+from dotenv import load_dotenv
+from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from tqdm import tqdm
-from sentence_transformers import SentenceTransformer
-from dotenv import load_dotenv
-import os
-import json
 
 # Charger les variables d'environnement
 load_dotenv()
 
+
 def charger_json_simple(chemin_fichier):
     """Charge simplement un fichier JSON"""
-    with open(chemin_fichier, 'r', encoding='utf-8') as f:
+    with open(chemin_fichier, "r", encoding="utf-8") as f:
         data = json.load(f)
     return data
+
 
 # Charger le dataset de benchmark
 ROOT_DIR = Path(__file__).resolve().parents[1]
 dataset_path = ROOT_DIR / "Benchmarks" / "Benchmark_dataset.json"
 df_test = charger_json_simple(dataset_path)
-queries = df_test['queries']
-corpus = df_test['corpus']
-ground_truth = df_test['ground_truth']
+queries = df_test["queries"]
+corpus = df_test["corpus"]
+ground_truth = df_test["ground_truth"]
 
 
 def get_embeddings(model, texts):
@@ -139,22 +142,29 @@ def get_embeddings(model, texts):
     emb = model.encode(texts)
     return np.array(emb)
 
-def evaluate_model(model_name, model, queries, corpus, ground_truth, k_values=[1, 3, 5, 10]):
+
+def evaluate_model(
+    model_name, model, queries, corpus, ground_truth, k_values=[1, 3, 5, 10]
+):
     print(f"\n Évaluation du modèle : {model_name}")
-    
+
     # Embeddings
     query_texts = [q["text"] for q in queries]
-    doc_texts   = [d["text"] for d in corpus]
-    doc_ids     = [d["id"] for d in corpus]
+    doc_texts = [d["text"] for d in corpus]
+    doc_ids = [d["id"] for d in corpus]
 
     query_emb = get_embeddings(model, query_texts)
-    doc_emb   = get_embeddings(model, doc_texts)
+    doc_emb = get_embeddings(model, doc_texts)
 
     # Similarités (matrice)
     sims = cosine_similarity(query_emb, doc_emb)
 
     # Résultats pour toutes les queries
-    mrr_scores, recalls, ndcgs = [], {k: [] for k in k_values}, {k: [] for k in k_values}
+    mrr_scores, recalls, ndcgs = (
+        [],
+        {k: [] for k in k_values},
+        {k: [] for k in k_values},
+    )
 
     for i, q in enumerate(tqdm(queries)):
         qid = q["id"]
@@ -167,7 +177,11 @@ def evaluate_model(model_name, model, queries, corpus, ground_truth, k_values=[1
         ranked_doc_ids = [doc_ids[j] for j in sorted_idx]
 
         # Positions des docs pertinents
-        ranks = [ranked_doc_ids.index(doc_id) + 1 for doc_id in relevant_docs if doc_id in ranked_doc_ids]
+        ranks = [
+            ranked_doc_ids.index(doc_id) + 1
+            for doc_id in relevant_docs
+            if doc_id in ranked_doc_ids
+        ]
         if not ranks:
             continue
 
@@ -200,6 +214,7 @@ def evaluate_model(model_name, model, queries, corpus, ground_truth, k_values=[1
         "nDCG": {k: np.mean(ndcgs[k]) for k in k_values},
     }
 
+
 if __name__ == "__main__":
     # Instancier les modèles
     bge_model = SentenceTransformer("BAAI/bge-m3")
@@ -207,13 +222,12 @@ if __name__ == "__main__":
 
     # Évaluer les modèles
     results_1 = evaluate_model("BGE-M3", bge_model, queries, corpus, ground_truth)
-    results_2 = evaluate_model("Multilingual-E5-Large", multilingual_model, queries, corpus, ground_truth)
+    results_2 = evaluate_model(
+        "Multilingual-E5-Large", multilingual_model, queries, corpus, ground_truth
+    )
 
     # Préparer les résultats à sauvegarder
-    all_results = {
-        "BGE-M3": results_1,
-        "Multilingual-E5-Large": results_2
-    }
+    all_results = {"BGE-M3": results_1, "Multilingual-E5-Large": results_2}
 
     # Définir le chemin du fichier de sortie
     output_path = ROOT_DIR / "Benchmarks" / "evaluation_results.json"

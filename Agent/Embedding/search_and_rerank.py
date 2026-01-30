@@ -12,14 +12,15 @@ Ce fichier :
     - Filtre et renvoie les meilleurs résultats avec leurs parents
 """
 
-from dotenv import load_dotenv
 import os
+from pathlib import Path
+
+import pandas as pd
+import torch
+from dotenv import load_dotenv
 from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-import torch
-import pandas as pd
-from pathlib import Path
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 # ---- Initialisation ----
 print("Initialisation des modèles et connexion à Qdrant...")
@@ -40,14 +41,21 @@ embedder = SentenceTransformer(embedding_model, device=device)
 
 # Cross-encoder reranker
 reranker_model = os.getenv("RERANKER_MODEL")
+if reranker_model is None:
+    raise RuntimeError("RERANKER_MODEL is not set")
+
 tokenizer = AutoTokenizer.from_pretrained(reranker_model)
-reranker = AutoModelForSequenceClassification.from_pretrained(reranker_model).to(device).eval()
+reranker = (
+    AutoModelForSequenceClassification.from_pretrained(reranker_model).to(device).eval()
+)
 
 print("✅ Modèles chargés et connexion à Qdrant établie.")
 
 
 # ---- Fonction de recherche et re-ranking ----
-def search_and_rerank(query: str, top_k: int = 20, final_k: int = 3, threshold: float = -7.0):
+def search_and_rerank(
+    query: str, top_k: int = 20, final_k: int = 3, threshold: float = -7.0
+):
     """
     Recherche les chunks les plus pertinents pour une requête donnée,
     puis applique un re-ranking via cross-encoder.
@@ -67,16 +75,27 @@ def search_and_rerank(query: str, top_k: int = 20, final_k: int = 3, threshold: 
         collection_name="documents_chunks",
         query=query_emb,
         limit=top_k,
-        with_payload=True
+        with_payload=True,
     )
 
     # Récupération des points depuis l'objet renvoyé par Qdrant
-    points = getattr(hits_obj, "result", None) or getattr(hits_obj, "points", None) or hits_obj
+    points = (
+        getattr(hits_obj, "result", None)
+        or getattr(hits_obj, "points", None)
+        or hits_obj
+    )
     if not points:
         return [], {}
 
     # Préparation des textes pour le reranker
-    docs = [p.payload["Chunk"] for p in points]
+    normalized_points = []
+
+    for p in points:
+        if isinstance(p, tuple):
+            p = p[1]
+        normalized_points.append(p)
+
+    docs = [p.payload["Chunk"] for p in normalized_points]
 
     inputs = tokenizer(
         [query] * len(docs),
@@ -84,7 +103,7 @@ def search_and_rerank(query: str, top_k: int = 20, final_k: int = 3, threshold: 
         padding=True,
         truncation=True,
         max_length=512,
-        return_tensors="pt"
+        return_tensors="pt",
     ).to(device)
 
     with torch.no_grad():
@@ -112,7 +131,7 @@ def search_and_rerank(query: str, top_k: int = 20, final_k: int = 3, threshold: 
             "page": payload.get("Page"),
             "parent_id": payload.get("ParentID"),
             "chunk": payload.get("Chunk"),
-            "similarity_score": similarity_score
+            "similarity_score": similarity_score,
         }
 
         results.append(dict_chunk)

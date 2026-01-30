@@ -37,7 +37,4 @@ def save_registry(path: Path, registry: set):
         path (Path): chemin vers le fichier JSON du registre
         registry (set): ensemble des éléments à sauvegarder
     """
-    path.write_text(
-        json.dumps(sorted(registry), indent=4),
-        encoding="utf-8"
-    )
+    path.write_text(json.dumps(sorted(registry), indent=4), encoding="utf-8")

@@ -9,11 +9,11 @@ Principales fonctionnalités :
 2. `chunk_paragraph` : découpe un paragraphe et ajoute des métadonnées.
 """
 
-from dotenv import load_dotenv
 import os
-import subprocess
 import time
+
 import ollama
+from dotenv import load_dotenv
 
 # Charger la configuration depuis le fichier .env
 load_dotenv()
@@ -29,13 +29,15 @@ TÂCHE
 Découper le texte fourni en sous-parties cohérentes appelées "chunks".
 
 INVARIANT ABSOLU (CRITIQUE) :
-Si l'on concatène tous les chunks EXACTEMENT dans l'ordre, en supprimant uniquement les séparateurs "/", on doit obtenir STRICTEMENT le texte original, caractère par caractère.
+Si l'on concatène tous les chunks EXACTEMENT dans l'ordre, en supprimant uniquement les
+séparateurs "/", on doit obtenir STRICTEMENT le texte original, caractère par caractère.
 
 RÈGLES STRICTES :
 - NE MODIFIE JAMAIS le texte (aucun mot, aucun espace, aucune ponctuation).
 - NE CORRIGE PAS les fautes, même évidentes.
 - NE TRADUIS PAS et ne changes pas la langue.
-- Découpe uniquement aux frontières naturelles des idées (phrases, propositions, transitions).
+- Découpe uniquement aux frontières naturelles des idées (phrases, propositions,
+transitions).
 - Chaque chunk doit rester compréhensible isolément.
 - Évite les chunks < 50 caractères ou > 800 caractères.
 - Ne fusionne pas artificiellement des idées distinctes pour respecter la taille.
@@ -57,6 +59,7 @@ Output :
 TEXTE À DÉCOUPER :
 {paragraph}
 """
+
 
 class AgenticChunker:
     """
@@ -96,7 +99,7 @@ class AgenticChunker:
             response = client.chat(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
-                stream=False
+                stream=False,
             )
             return response.message.content
         except Exception as e:
@@ -122,19 +125,21 @@ class AgenticChunker:
         Returns:
             list[dict]: Liste des chunks avec métadonnées.
         """
-        
+
         prompt = AGENTIC_PROMPT.format(paragraph=paragraph_text)
         response = self.query_llm(prompt)
         raw_chunks = [c.strip() for c in response.split("/") if c.strip()]
 
         chunks_list = []
         for chunk_text in raw_chunks:
-            chunks_list.append({
-                "parent_paragraph_id": parent_id,
-                "page_number": page_number,
-                "document_name": document_name,
-                "text": chunk_text
-            })
+            chunks_list.append(
+                {
+                    "parent_paragraph_id": parent_id,
+                    "page_number": page_number,
+                    "document_name": document_name,
+                    "text": chunk_text,
+                }
+            )
 
         time.sleep(self.delay)
         return chunks_list

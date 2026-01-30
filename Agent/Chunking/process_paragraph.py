@@ -13,7 +13,10 @@ pour traiter plusieurs paragraphes indépendamment.
 """
 
 from uuid import uuid4  # Génération d'identifiants uniques
-from Chunking.agentic_chunker_ollama import AgenticChunker  # Chunker basé sur un LLM via Ollama
+
+from Chunking.agentic_chunker_ollama import (  # Chunker basé sur un LLM via Ollama
+    AgenticChunker,
+)
 
 
 def process_paragraph(args):
@@ -48,7 +51,7 @@ def process_paragraph(args):
         paragraph_text,
         document_name=file_name,
         page_number=page_number,
-        parent_id=paragraph_id
+        parent_id=paragraph_id,
     )
 
     # Structure de sortie normalisée
@@ -57,7 +60,7 @@ def process_paragraph(args):
             "paragraph_id": paragraph_id,
             "document_name": file_name,
             "page_number": page_number,
-            "text": paragraph_text
+            "text": paragraph_text,
         },
-        "chunks": chunks
+        "chunks": chunks,
     }

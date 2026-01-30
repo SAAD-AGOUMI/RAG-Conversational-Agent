@@ -13,10 +13,11 @@ Ce fichier Streamlit gère :
 7. La sauvegarde automatique de l'historique des conversations.
 """
 
-import sys
-import os
 import base64
+import os
+import sys
 from datetime import datetime
+
 import streamlit as st
 
 # ---------------------------------------------------------
@@ -25,18 +26,18 @@ import streamlit as st
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 sys.path.append(ROOT_DIR)
 
-from utils.llm_client import query_llm
+from Embedding.search_and_rerank import search_and_rerank
 from utils.auth_local import require_login
 from utils.config_loader import (
-    load_config,
+    get_history_title,
     list_history_files,
+    load_config,
     load_history_for,
     save_history_for,
     user_folder,
-    get_history_title,
 )
 from utils.history_utils import new_history_filename
-from Embedding.search_and_rerank import search_and_rerank
+from utils.llm_client import query_llm
 
 # ---------------------------------------------------------
 # Chargement de la configuration
@@ -44,9 +45,7 @@ from Embedding.search_and_rerank import search_and_rerank
 config = load_config()
 
 st.set_page_config(
-    page_title=f"{config['app']['title']} - Discussion",
-    page_icon="💬",
-    layout="wide"
+    page_title=f"{config['app']['title']} - Discussion", page_icon="💬", layout="wide"
 )
 
 # ---------------------------------------------------------
@@ -125,9 +124,7 @@ with st.sidebar:
         return get_history_title(username, option)
 
     selection = st.selectbox(
-        "Sélectionnez une discussion",
-        ["--"] + files,
-        format_func=_format_option
+        "Sélectionnez une discussion", ["--"] + files, format_func=_format_option
     )
 
     if selection != "--" and selection != st.session_state["current_history_file"]:
@@ -136,7 +133,7 @@ with st.sidebar:
         st.session_state["chat_title"] = get_history_title(username, selection)
         st.session_state["pending_title"] = None
         st.rerun()
-    
+
     # -------------------------------
     # Déconnexion
     # -------------------------------
@@ -173,10 +170,7 @@ if prompt:
     if use_rag:
         with st.spinner("Recherche dans la base documentaire..."):
             results, parents = search_and_rerank(
-                query=prompt,
-                top_k=top_k,
-                final_k=final_k,
-                threshold=threshold
+                query=prompt, top_k=top_k, final_k=final_k, threshold=threshold
             )
 
         chunks_recuperes = "\n\n".join(
@@ -185,8 +179,7 @@ if prompt:
         )
 
         parents_recuperes = "\n\n".join(
-            f"- ParentID {pid} : {txt}"
-            for pid, txt in parents.items()
+            f"- ParentID {pid} : {txt}" for pid, txt in parents.items()
         )
 
         final_prompt = f"""
@@ -205,25 +198,30 @@ if prompt:
         {parents_recuperes}
 
         PROCÉDURE OBLIGATOIRE (à suivre dans cet ordre, sans exception) :
-        1. Parmi les extraits fournis, identifie au maximum DEUX extraits ayant la meilleure pertinence sémantique pour répondre à la question.
+        1. Parmi les extraits fournis, identifie au maximum DEUX extraits ayant la
+        meilleure pertinence sémantique pour répondre à la question.
         2. Identifie les textes sources associés à ces extraits.
         3. Analyse EXCLUSIVEMENT le contenu de ces textes sources.
-        4. Détermine si l'un de ces textes contient une information explicite, directe et suffisante pour répondre à la question.
-        5. Si oui, formule la réponse uniquement à partir des formulations présentes dans ce texte.
+        4. Détermine si l'un de ces textes contient une information explicite, directe
+        et suffisante pour répondre à la question.
+        5. Si oui, formule la réponse uniquement à partir des formulations présentes
+        dans ce texte.
         6. Si non, produis la réponse négative standard définie ci-dessous.
 
         CONTRAINTES ABSOLUES :
         - Interdiction totale d'utiliser des connaissances extérieures.
         - Interdiction d'inférer, déduire, compléter ou interpréter au-delà du texte.
         - Interdiction d'ajouter des détails absents des textes.
-        - Interdiction de mentionner la méthode, les scores ou les identifiants techniques.
+        - Interdiction de mentionner la méthode, les scores ou les identifiants
+        techniques.
         - Le vocabulaire doit rester au plus proche de celui du texte source.
 
         FORMAT DE SORTIE :
         - Réponse directe, factuelle, sans introduction ni conclusion.
         - Une seule réponse finale, pas d'explication du raisonnement.
 
-        RÉPONSE NÉGATIVE STANDARD (à utiliser obligatoirement si l'information n'est pas trouvée) :
+        RÉPONSE NÉGATIVE STANDARD (à utiliser obligatoirement si l'information
+        n'est pas trouvée) :
         « L'information demandée n'apparaît pas dans les extraits fournis. »
         """.strip()
 
@@ -287,7 +285,7 @@ if prompt:
         username,
         st.session_state["messages"],
         st.session_state["current_history_file"],
-        title=st.session_state.get("chat_title")
+        title=st.session_state.get("chat_title"),
     )
 
     st.rerun()

@@ -10,11 +10,12 @@ Ce fichier permet à l'administrateur de :
 🔒 L'accès est strictement réservé à l'utilisateur "admin".
 """
 
-import streamlit as st
+import subprocess
 import sys
 import time
 from pathlib import Path
-import subprocess
+
+import streamlit as st
 
 from utils.auth_local import require_login
 
@@ -69,8 +70,7 @@ if "pending_upload" not in st.session_state:
 st.subheader("📥 Ajouter un document à la base")
 
 uploaded_file = st.file_uploader(
-    "Formats supportés : PDF, DOCX, TXT",
-    type=["pdf", "docx", "txt"]
+    "Formats supportés : PDF, DOCX, TXT", type=["pdf", "docx", "txt"]
 )
 
 if uploaded_file:
@@ -85,8 +85,11 @@ if pending:
     with col1:
         if st.button("✅ Confirmer l'ajout"):
             save_path = NEW_DOCS_DIR / pending.name
+            processed_path = PROCESSED_DOCS_DIR / pending.name
 
-            if save_path.exists():
+            if processed_path.exists():
+                st.warning("⚠️ Ce fichier a déjà été traité auparavant.")
+            elif save_path.exists():
                 st.warning("⚠️ Ce fichier est déjà présent.")
             else:
                 with open(save_path, "wb") as f:
@@ -132,7 +135,7 @@ if st.button("Re-vectoriser tous les chunks"):
         result = subprocess.run(
             [sys.executable, str(ROOT_DIR / "Embedding" / "indexation_database.py")],
             capture_output=True,
-            text=True
+            text=True,
         )
 
         elapsed = time.time() - start
