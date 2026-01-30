@@ -53,8 +53,8 @@ jobs:
         run: docker pull qdrant/qdrant:latest
 
       # Build Ollama
-      - name: Build Ollama image
-        run: docker build -t ollama-server .
+      #- name: Build Ollama image
+      #  run: docker build -t ollama-server .
 
       # Build Agent
       - name: Build Agent image
