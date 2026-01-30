@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# mypy cache
+.mypy_cache/
+
+# history
+App/utils/history/
+
+# Ollama models
+ollama_models/
+
+# DeepEval
+*.deepeval
