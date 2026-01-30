@@ -18,8 +18,8 @@ import ollama
 # Charger la configuration depuis le fichier .env
 load_dotenv()
 model_name = os.getenv("LLM_CHUNKING")
-OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://ollama-server:11434")
-client = ollama.Client(host=OLLAMA_HOST)
+OLLAMA_URL = os.getenv("OLLAMA_URL")
+client = ollama.Client(host=OLLAMA_URL)
 
 AGENTIC_PROMPT = """RÔLE
 Tu es un agent de segmentation mécanique de texte.

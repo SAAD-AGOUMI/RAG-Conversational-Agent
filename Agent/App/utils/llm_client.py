@@ -2,7 +2,7 @@
 🌐 Gestion de la connexion à Ollama et requêtes LLM
 
 Ce module fournit :
-1. La configuration du client Ollama pour un environnement conteneurisé (host = localhost)
+1. La configuration du client Ollama pour un environnement conteneurisé
 2. La définition de la variable d'environnement appropriée pour le client Ollama
 3. Une fonction pour interroger le modèle LLM avec un prompt utilisateur
 4. Un message système sécurisant pour éviter les hallucinations et protéger la vie privée
@@ -15,10 +15,10 @@ import ollama
 # -----------------------------
 # 🌐 Configuration du client Ollama pour conteneur
 # -----------------------------
-OLLAMA_HOST = os.getenv("OLLAMA_URL")
+OLLAMA_URL = os.getenv("OLLAMA_URL")
 
 # Crée un client Ollama explicitement lié au host correct
-client = ollama.Client(host=OLLAMA_HOST)
+client = ollama.Client(host=OLLAMA_URL)
 
 # Charger la configuration depuis le fichier .env
 load_dotenv()
