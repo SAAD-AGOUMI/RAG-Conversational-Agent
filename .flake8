@@ -6,6 +6,6 @@ exclude =
     __pycache__,
     .venv,
     env,
-    Embedding/Benchmarks,
-    Evaluation,
+    Agent/Embedding/Benchmarks,
+    Agent/Evaluation,
     *.ipynb
