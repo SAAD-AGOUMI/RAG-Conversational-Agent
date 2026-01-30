@@ -12,7 +12,6 @@ Fonctionnalités :
 """
 
 import streamlit as st
-
 from utils.auth_local import require_login
 from utils.config_loader import list_history_files, load_history_for
 
