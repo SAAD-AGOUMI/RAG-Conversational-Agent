@@ -49,20 +49,26 @@ SYSTEM_PROMPT = (
 # -----------------------------
 # 💬 Fonction pour interroger le modèle LLM
 # -----------------------------
-def query_llm(prompt: str):
+def query_llm(prompt: str, history: list = None):
     """
-    Envoie un prompt utilisateur au LLM Ollama et retourne la réponse.
+    Envoie un prompt au LLM Ollama et retourne la réponse générée.
 
     Paramètres :
-    - prompt (str) : texte à envoyer au modèle
+    - prompt (str) : message utilisateur à envoyer au modèle.
+    - history (list | None) : historique optionnel de la conversation,
+    sous la forme d'une liste de tuples (role, content, timestamp).
+    Si None ou vide, le modèle est interrogé sans contexte conversationnel.
 
     Retour :
-    - str : réponse générée par le modèle ou message d'erreur
+    - str : réponse générée par le modèle ou message d'erreur en cas d'échec.
     """
-    messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": prompt}
-    ]
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+
+    if history:
+        for role, content, _ in history:
+            messages.append({"role": role, "content": content})
+
+    messages.append({"role": "user", "content": prompt})
 
     model_name = os.getenv("LLM_RAG")
 
@@ -72,27 +78,10 @@ def query_llm(prompt: str):
             messages=messages,
             stream=False,
         )
+        return response["message"]["content"]
     except Exception as e:
         return (
             f"⚠️ Erreur de connexion au modèle ({model_name}).\n"
-            f"Assurez-vous que Ollama est en cours d'exécution.\n\n"
+            f"Problème avec Ollama.\n\n"
             f"Détails : {e}"
         )
-
-    # -----------------------------
-    # ✅ Extraction de la réponse de l'assistant selon le format du client Ollama
-    # -----------------------------
-    # Nouveau format Python Ollama client
-    try:
-        return response.message.content
-    except:
-        pass
-
-    # Ancien format (dict)
-    try:
-        return response["message"]["content"]
-    except:
-        pass
-
-    # Fallback (debug)
-    return str(response)

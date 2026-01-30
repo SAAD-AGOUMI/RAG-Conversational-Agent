@@ -234,7 +234,7 @@ if prompt:
     # Réponse du LLM
     # ---------------------------------------------------------
     with st.spinner("Génération de la réponse..."):
-        response = query_llm(final_prompt)
+        response = query_llm(final_prompt, history=st.session_state["messages"])
 
     now_resp = datetime.now().isoformat(timespec="seconds")
     st.session_state["messages"].append(("assistant", response, now_resp))
