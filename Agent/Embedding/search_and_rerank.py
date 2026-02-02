@@ -27,7 +27,7 @@ print("Initialisation des modèles et connexion à Qdrant...")
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 PAR_PATH = ROOT_DIR / "Chunking/data_chunking/paragraphs.json"
-df_parents = pd.read_json(PAR_PATH)
+df_parents = pd.read_json(PAR_PATH, orient="records")
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
