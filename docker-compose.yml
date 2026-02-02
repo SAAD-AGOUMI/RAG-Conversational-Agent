@@ -13,7 +13,7 @@ services:
     ports:
       - "11434:11434"
     environment:
-      - OLLAMA_HOST=${OLLAMA_URL}
+      - OLLAMA_HOST=0.0.0.0:11434
       - LLM_RAG=${LLM_RAG}
       - LLM_CHUNKING=${LLM_CHUNKING}
     volumes:
